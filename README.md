@@ -6,7 +6,7 @@ Rewritten code found on the internet
 
 - Flutter Version: 3.16.5
 - Dart Version: 3.2.3
-- Gradle Version: 7.4.2
+- Gradle Version: 8.2.1
 - Kotlin Version: 1.9.22
 - Firebase Version: 10.18.0
 - Android Studio Hedgehog | 2023.1.1 Patch 1
