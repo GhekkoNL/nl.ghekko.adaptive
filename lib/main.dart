@@ -31,7 +31,7 @@ class AppScaffold extends StatelessWidget {
                 visualDensity: density,
                 useMaterial3: true,
                 colorScheme: darkColorScheme),
-            home: const App(),
+            home: const App(title: 'Ghekko Adaptive'),
           );
         },
       ),

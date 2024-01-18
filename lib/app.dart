@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'global/device_size.dart';
+import 'global/device_type.dart';
 import 'global/styling.dart';
 import 'global/targeted_actions.dart';
 import 'model/app_model.dart';
@@ -18,9 +19,7 @@ List<Widget> getMainMenuChildren(BuildContext context) {
   int index = context.select((AppModel m) => m.selectedIndex);
   return [
     SelectedPageButton(
-        onPressed: () => changePage(0),
-        label: "Grid",
-        isSelected: index == 0),
+        onPressed: () => changePage(0), label: "Grid", isSelected: index == 0),
     SelectedPageButton(
         onPressed: () => changePage(1),
         label: "Data Table",
@@ -30,15 +29,14 @@ List<Widget> getMainMenuChildren(BuildContext context) {
         label: "Reflow",
         isSelected: index == 2),
     SelectedPageButton(
-        onPressed: () => changePage(3),
-        label: "Focus",
-        isSelected: index == 3),
+        onPressed: () => changePage(3), label: "Focus", isSelected: index == 3),
   ];
 }
 
 // Uses a tab navigation + drawer,  or a side-menu that combines both
 class App extends StatefulWidget {
-  const App({super.key});
+  const App({super.key, required this.title});
+  final String title;
 
   @override
   State createState() => AppState();
@@ -50,6 +48,7 @@ class AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     bool useTabs = MediaQuery.of(context).size.width < FormFactor.tablet;
+    bool isMobile = DeviceType.isAndroid || DeviceType.isIOS;
     return TargetedActionScope(
       shortcuts: <LogicalKeySet, Intent>{
         LogicalKeySet(LogicalKeyboardKey.keyA, LogicalKeyboardKey.control):
@@ -69,11 +68,20 @@ class AppState extends State<App> {
                   child: Scaffold(
                     backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                     key: _scaffoldKey,
-                    drawer: useTabs
-                        ? const SideMenu(showPageButtons: false)
-                        : null,
+                    drawer:
+                        useTabs ? const SideMenu(showPageButtons: false) : null,
                     appBar: useTabs
-                        ? AppBar(backgroundColor: Theme.of(context).scaffoldBackgroundColor)
+                        ? AppBar(
+                            backgroundColor:
+                                Theme.of(context).scaffoldBackgroundColor,
+                            title:
+                                LayoutBuilder(builder: (context, constraints) {
+                              if (isMobile) {
+                                return const Text('Ghekko Adaptive');
+                              } else {
+                                return const SizedBox();
+                              }
+                            }))
                         : null,
                     body: Stack(children: [
                       // Vertical layout with Tab controller and drawer
@@ -149,7 +157,9 @@ class SideMenu extends StatelessWidget {
           Align(
               alignment: Alignment.centerRight,
               child: Container(
-                  width: 1, height: double.infinity, color: Theme.of(context).scaffoldBackgroundColor)),
+                  width: 1,
+                  height: double.infinity,
+                  color: Theme.of(context).scaffoldBackgroundColor)),
         ],
       ),
     );
@@ -168,11 +178,12 @@ class TabMenu extends StatelessWidget {
     return Column(
       children: [
         // Top Divider
-        Container(width: double.infinity, height: 1, color: Theme.of(context).scaffoldBackgroundColor),
+        Container(
+            width: double.infinity,
+            height: 1,
+            color: Theme.of(context).scaffoldBackgroundColor),
         // Tab buttons
-        Row(
-            children: tabButtons
-        ),
+        Row(children: tabButtons),
       ],
     );
   }
