@@ -19,19 +19,19 @@ List<Widget> getMainMenuChildren(BuildContext context) {
   return [
     SelectedPageButton(
         onPressed: () => changePage(0),
-        label: "Adaptive Grid",
+        label: "Grid",
         isSelected: index == 0),
     SelectedPageButton(
         onPressed: () => changePage(1),
-        label: "Adaptive Data Table",
+        label: "Data Table",
         isSelected: index == 1),
     SelectedPageButton(
         onPressed: () => changePage(2),
-        label: "Adaptive Reflow",
+        label: "Reflow",
         isSelected: index == 2),
     SelectedPageButton(
         onPressed: () => changePage(3),
-        label: "Focus Examples",
+        label: "Focus",
         isSelected: index == 3),
   ];
 }
@@ -59,7 +59,6 @@ class AppState extends State<App> {
         LogicalKeySet(LogicalKeyboardKey.delete): DeleteIntent(),
       },
       child: SizedBox(
-        //color: Colors.white,
         child: Material(
           child: Column(
             children: [
@@ -68,29 +67,30 @@ class AppState extends State<App> {
                 child: Focus(
                   autofocus: true,
                   child: Scaffold(
+                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                     key: _scaffoldKey,
                     drawer: useTabs
-                        ? const _SideMenu(showPageButtons: false)
+                        ? const SideMenu(showPageButtons: false)
                         : null,
                     appBar: useTabs
-                        ? AppBar(backgroundColor: Colors.blue.shade300)
+                        ? AppBar(backgroundColor: Theme.of(context).scaffoldBackgroundColor)
                         : null,
                     body: Stack(children: [
                       // Vertical layout with Tab controller and drawer
                       if (useTabs) ...[
-                        Column(
+                        const Column(
                           children: [
-                            Expanded(child: _PageStack()),
-                            _TabMenu(),
+                            Expanded(child: PageStack()),
+                            TabMenu(),
                           ],
                         )
                       ]
                       // Horizontal layout with desktop style side menu
                       else ...[
-                        Row(
+                        const Row(
                           children: [
-                            const _SideMenu(),
-                            Expanded(child: _PageStack()),
+                            SideMenu(),
+                            Expanded(child: PageStack()),
                           ],
                         ),
                       ],
@@ -106,7 +106,9 @@ class AppState extends State<App> {
   }
 }
 
-class _PageStack extends StatelessWidget {
+class PageStack extends StatelessWidget {
+  const PageStack({super.key});
+
   @override
   Widget build(BuildContext context) {
     int index = context.select((AppModel model) => model.selectedIndex);
@@ -119,15 +121,15 @@ class _PageStack extends StatelessWidget {
   }
 }
 
-class _SideMenu extends StatelessWidget {
-  const _SideMenu({this.showPageButtons = true});
+class SideMenu extends StatelessWidget {
+  const SideMenu({super.key, this.showPageButtons = true});
 
   final bool showPageButtons;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: Theme.of(context).scaffoldBackgroundColor,
       width: 250,
       child: Stack(
         children: [
@@ -147,14 +149,16 @@ class _SideMenu extends StatelessWidget {
           Align(
               alignment: Alignment.centerRight,
               child: Container(
-                  width: 1, height: double.infinity, color: Colors.blue)),
+                  width: 1, height: double.infinity, color: Theme.of(context).scaffoldBackgroundColor)),
         ],
       ),
     );
   }
 }
 
-class _TabMenu extends StatelessWidget {
+class TabMenu extends StatelessWidget {
+  const TabMenu({super.key});
+
   @override
   Widget build(BuildContext context) {
     // Wrap all the main menu buttons in Expanded() so they fill up the screen horizontally
@@ -164,9 +168,11 @@ class _TabMenu extends StatelessWidget {
     return Column(
       children: [
         // Top Divider
-        Container(width: double.infinity, height: 1, color: Colors.blue),
+        Container(width: double.infinity, height: 1, color: Theme.of(context).scaffoldBackgroundColor),
         // Tab buttons
-        Row(children: tabButtons),
+        Row(
+            children: tabButtons
+        ),
       ],
     );
   }

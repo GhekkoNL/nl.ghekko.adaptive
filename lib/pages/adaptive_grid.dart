@@ -2,7 +2,6 @@ import 'dart:math';
 import 'package:adaptive/global/device_type.dart';
 import 'package:adaptive/global/styling.dart';
 import 'package:adaptive/global/targeted_actions.dart';
-import 'package:adaptive/widgets/buttons.dart';
 import 'package:flutter/material.dart';
 
 class AdaptiveGrid extends StatefulWidget {
@@ -21,23 +20,21 @@ class AdaptiveGridState extends State<AdaptiveGrid> {
   @override
   Widget build(BuildContext context) {
     // Create a list of widgets to render, inject .isSelected into each item
-    Widget buildGridItem(int index) =>
-        _GridItem(index, isSelected: _selectedItems.contains(index), onPressed: _handleItemPressed);
+    Widget buildGridItem(int index) => _GridItem(index,
+        isSelected: _selectedItems.contains(index),
+        onPressed: _handleItemPressed);
     List<Widget> listChildren = _listItems.map(buildGridItem).toList();
     return TargetedActionBinding(
       actions: {
-        SelectAllIntent: CallbackAction(onInvoke: (Intent intent) => _handleSelectAllPressed()),
-        SelectNoneIntent: CallbackAction(onInvoke: (Intent intent) => _handleSelectNonePressed()),
-        DeleteIntent: CallbackAction(onInvoke: (Intent intent) => _handleDeleteSelectedPressed()),
+        SelectAllIntent: CallbackAction(
+            onInvoke: (Intent intent) => _handleSelectAllPressed()),
+        SelectNoneIntent: CallbackAction(
+            onInvoke: (Intent intent) => _handleSelectNonePressed()),
+        DeleteIntent: CallbackAction(
+            onInvoke: (Intent intent) => _handleDeleteSelectedPressed()),
       },
       child: Column(
         children: [
-          Row(
-            children: [
-              StyledTextButton(onPressed: _handleSelectAllPressed, child: const Text("Select All")),
-              StyledTextButton(onPressed: _handleSelectNonePressed, child: const Text("Select None")),
-            ],
-          ),
           Expanded(
             child: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
@@ -61,7 +58,8 @@ class AdaptiveGridState extends State<AdaptiveGrid> {
     );
   }
 
-  void _handleSelectAllPressed() => setState(() => _selectedItems = List.from(_listItems));
+  void _handleSelectAllPressed() =>
+      setState(() => _selectedItems = List.from(_listItems));
   void _handleSelectNonePressed() => setState(() => _selectedItems.clear());
   void _handleDeleteSelectedPressed() => setState(() => _selectedItems.clear());
 
@@ -77,7 +75,8 @@ class AdaptiveGridState extends State<AdaptiveGrid> {
 }
 
 class _GridItem extends StatelessWidget {
-  const _GridItem(this.index, {required this.isSelected, required this.onPressed});
+  const _GridItem(this.index,
+      {required this.isSelected, required this.onPressed});
   final int index;
   final bool isSelected;
   final void Function(int index) onPressed;
@@ -90,18 +89,22 @@ class _GridItem extends StatelessWidget {
       child: TextButton(
         onPressed: () => onPressed.call(index),
         child: Stack(children: [
-          const Center(child: FlutterLogo(size: 64)),
-          Container(color: Colors.grey.withOpacity(isSelected ? .5 : .7)),
+          const Center(child: SizedBox()),
+          Container(color: Theme.of(context).colorScheme.primary.withOpacity(isSelected ? .5 : .7)),
           Align(
               alignment: Alignment.bottomCenter,
               child: Container(
                   width: double.infinity,
-                  color: Colors.grey.shade600,
+                  color: Theme.of(context).colorScheme.secondaryContainer,
                   height: 50,
                   alignment: Alignment.center,
-                  child: Text("Grid Item $index", style: const TextStyle(color: Colors.white)))),
+                  child: Text("Grid Item $index",
+                      style: const TextStyle(color: Colors.white)))),
           // Selected border
-          Container(decoration: BoxDecoration(border: Border.all(color: Colors.blue.shade200, width: borderWidth))),
+          Container(
+              decoration: BoxDecoration(
+                  border: Border.all(
+                      color: Theme.of(context).colorScheme.onSurface, width: borderWidth))),
         ]),
       ),
     );

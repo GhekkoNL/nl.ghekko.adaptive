@@ -1,10 +1,12 @@
 import 'package:adaptive/app.dart';
+import 'package:adaptive/theme/color_schemes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'model/app_model.dart';
 
 void main() {
-  runApp(const AppScaffold());}
+  runApp(const AppScaffold());
+}
 
 class AppScaffold extends StatelessWidget {
   const AppScaffold({super.key});
@@ -17,11 +19,19 @@ class AppScaffold extends StatelessWidget {
         builder: (context) {
           bool touchMode = context.select((AppModel m) => m.touchMode);
           double densityAmt = touchMode ? 0.0 : -1.0;
-          VisualDensity density = VisualDensity(horizontal: densityAmt, vertical: densityAmt);
+          VisualDensity density =
+              VisualDensity(horizontal: densityAmt, vertical: densityAmt);
           return MaterialApp(
-            theme: ThemeData(visualDensity: density),
-            home: const App(),
             debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+                visualDensity: density,
+                useMaterial3: true,
+                colorScheme: lightColorScheme),
+            darkTheme: ThemeData(
+                visualDensity: density,
+                useMaterial3: true,
+                colorScheme: darkColorScheme),
+            home: const App(),
           );
         },
       ),

@@ -18,7 +18,7 @@ class AppTitleBar extends StatelessWidget {
       child: Stack(
         children: [
           // Sets background and height for title bar
-          Positioned.fill(child: Container(color: Colors.blue)),
+          Positioned.fill(child: Container(color: Theme.of(context).colorScheme.onPrimary)),
 
           // App Logo or Title
           if (hideTitle == false)

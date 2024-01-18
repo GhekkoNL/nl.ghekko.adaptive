@@ -2,7 +2,8 @@ import 'package:adaptive/global/styling.dart';
 import 'package:flutter/material.dart';
 
 class StyledTextButton extends StatelessWidget {
-  const StyledTextButton({super.key, required this.onPressed, required this.child});
+  const StyledTextButton(
+      {super.key, required this.onPressed, required this.child});
   final VoidCallback onPressed;
   final Widget child;
 
@@ -35,7 +36,11 @@ class SecondaryMenuButton extends StatelessWidget {
 }
 
 class SelectedPageButton extends StatelessWidget {
-  const SelectedPageButton({super.key, required this.onPressed, required this.label, required this.isSelected});
+  const SelectedPageButton(
+      {super.key,
+      required this.onPressed,
+      required this.label,
+      required this.isSelected});
   final VoidCallback? onPressed;
   final String label;
   final bool isSelected;
@@ -43,7 +48,9 @@ class SelectedPageButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: isSelected ? Colors.grey.shade200 : null,
+      color: isSelected
+          ? Theme.of(context).colorScheme.surface
+          : Colors.transparent,
       child: TextButton(
         onPressed: onPressed,
         child: Container(
